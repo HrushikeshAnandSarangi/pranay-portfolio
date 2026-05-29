@@ -30,7 +30,7 @@ export const Lightbox: Component = () => {
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.1, easing: "ease-out" }}
-            class="max-w-full max-h-full object-contain rounded-lg shadow-2xl cursor-default" 
+            class="w-auto h-auto max-w-[95vw] max-h-[85vh] md:max-w-[90vw] md:max-h-[90vh] object-contain rounded-lg shadow-2xl cursor-default" 
             onClick={(e: Event) => e.stopPropagation()}
           />
         </Motion.div>

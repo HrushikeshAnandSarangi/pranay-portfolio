@@ -43,12 +43,8 @@ export default function Footer() {
         <div class="absolute inset-0 bg-gradient-to-b from-neutral-900/50 via-black to-black" />
 
         {/* Decorative geometric shapes */}
-        <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-white/10 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 animate-pulse" />
-        <div
-          class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-white/10 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 animate-pulse"
-          style="animation-delay: 2s"
-        />
-        <div class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-white/5 to-transparent rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 animate-pulse" />
+        <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-white/10 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-white/5 to-transparent rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
         {/* 8-Bit Continuous Animation */}
         <div class="absolute bottom-6 left-0 w-full overflow-visible pointer-events-none opacity-20">
@@ -150,7 +146,7 @@ export default function Footer() {
           class="mb-8 flex justify-center"
         >
           <div class="flex items-center gap-3 rounded-full border border-white/20 bg-white/5 px-4 py-2 backdrop-blur-sm">
-            <div class="h-2 w-2 rounded-full bg-white animate-pulse" />
+            <div class="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
             <span class="text-xs font-mono font-medium text-white uppercase tracking-widest">Available For Work</span>
           </div>
         </Motion.div>

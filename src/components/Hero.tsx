@@ -14,16 +14,16 @@ const Hero: Component = () => {
   
   let containerRef: HTMLDivElement | undefined;
 
-  let mouseReq: number;
+  let mouseReq: number | null = null;
   const handleMouseMove = (e: MouseEvent) => {
-    if (!containerRef) return;
-    if (mouseReq) cancelAnimationFrame(mouseReq);
+    if (!containerRef || mouseReq) return;
     mouseReq = requestAnimationFrame(() => {
       const rect = containerRef!.getBoundingClientRect();
       // Calculate relative mouse position (-1 to 1)
       const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       const y = ((e.clientY - rect.top) / rect.height) * 2 - 1;
       setMousePos({ x, y });
+      mouseReq = null;
     });
   };
 

@@ -63,38 +63,27 @@ const Experience = () => {
   const [pathProgress, setPathProgress] = createSignal(0);
   const [mounted, setMounted] = createSignal(false);
   const [parallax, setParallax] = createSignal({ x: 0, y: 0 });
-  const [glowPulse, setGlowPulse] = createSignal(0);
-  const [climberPing, setClimberPing] = createSignal(0);
   let sectionRef: HTMLElement | undefined;
   let animFrameId: number;
-  let glowFrameId: number;
 
   // ── Scroll-triggered path animation ──────────────────────────────
   onMount(() => {
     setMounted(true);
 
-    // Glow pulse loop
-    let glowStart = performance.now();
-    const animateGlow = (ts: number) => {
-      setGlowPulse((Math.sin((ts - glowStart) / 1800) + 1) / 2);
-      setClimberPing((Math.sin((ts - glowStart) / 900) + 1) / 2);
-      glowFrameId = requestAnimationFrame(animateGlow);
-    };
-    glowFrameId = requestAnimationFrame(animateGlow);
-
     // Parallax on mouse move
-    let mouseReq: number;
+    let mouseReq: number | null = null;
     const onMouseMove = (e: MouseEvent) => {
-      if (mouseReq) cancelAnimationFrame(mouseReq);
+      if (mouseReq) return;
       mouseReq = requestAnimationFrame(() => {
         const w = window.innerWidth;
         const h = window.innerHeight;
         const nx = (e.clientX / w - 0.5) * 2; // -1 to 1
         const ny = (e.clientY / h - 0.5) * 2;
         setParallax({ x: nx * 3, y: ny * 2 });
+        mouseReq = null;
       });
     };
-    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
 
     // Intersection observer → trigger draw
     const observer = new IntersectionObserver(
@@ -130,7 +119,6 @@ const Experience = () => {
     onCleanup(() => {
       window.removeEventListener('mousemove', onMouseMove);
       cancelAnimationFrame(animFrameId);
-      cancelAnimationFrame(glowFrameId);
     });
   });
 
@@ -164,8 +152,6 @@ const Experience = () => {
           transform-origin: top;
         }
       `}</style>
-
-      {/* ── Removed heavy SVG Grain overlay for scroll performance ─────────────────────────────────────── */}
 
       {/* ── Faint grid lines ──────────────────────────────────── */}
       <div class="pointer-events-none absolute inset-0 overflow-hidden">
@@ -266,21 +252,10 @@ const Experience = () => {
                     <stop
                       offset="0%"
                       stop-color="white"
-                      stop-opacity={0.03 + glowPulse() * 0.07}
+                      stop-opacity="0.05"
                     />
                     <stop offset="100%" stop-color="white" stop-opacity="0" />
                   </radialGradient>
-                  <radialGradient id="climberGlow" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="white" stop-opacity="0.6" />
-                    <stop offset="100%" stop-color="white" stop-opacity="0" />
-                  </radialGradient>
-                  <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
-                    <feGaussianBlur stdDeviation="3" result="blur" />
-                    <feMerge>
-                      <feMergeNode in="blur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
                   <filter id="softBlur">
                     <feGaussianBlur stdDeviation="2" />
                   </filter>
@@ -485,10 +460,11 @@ const Experience = () => {
                         {/* Outer ping ring */}
                         {isActive && (
                           <circle
-                            cx={cx} cy={cy} r={10 + climberPing() * 10}
-                            fill="none" stroke="white"
-                            stroke-width="0.5"
-                            stroke-opacity={0.4 * (1 - climberPing())}
+                            cx={cx} cy={cy} r="15"
+                            fill="none"
+                            stroke="white"
+                            stroke-opacity="0.2"
+                            style={{ animation: 'climberPulse 2s ease-in-out infinite' }}
                           />
                         )}
                         {/* Hover halo */}
